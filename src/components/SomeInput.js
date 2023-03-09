@@ -1,45 +1,50 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 const SomeInput = () => {
-  const nameInputRef = useRef();
   const [enteredName, setEnteredName] = useState("");
-  const [isEnteredNameValid, setIsEnteredNameValid] = useState(true);
+  const [wasNameInputTouched, setWasNameInputTouched] = useState(false);
+
+  const isEnteredNameValid = enteredName.trim() !== "";
+  const isNameInputInvalid = !isEnteredNameValid && wasNameInputTouched;
 
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
   };
 
+  const nameInputLostFocusHandler = (event) => {
+    setWasNameInputTouched(true);
+  };
+
   const formSubmitHandler = (event) => {
     event.preventDefault();
+    setWasNameInputTouched(true);
 
-    if (enteredName.trim() === "") {
-      setIsEnteredNameValid(false);
+    if (!isEnteredNameValid) {
       return;
     }
 
-    setIsEnteredNameValid(true);
-
-    console.log(enteredName);
-    console.log(nameInputRef.current.value);
     setEnteredName("");
+    setWasNameInputTouched(false);
   };
 
-  const nameInputClasses = isEnteredNameValid
-    ? "form-control"
-    : "form-control invalid";
+  const nameInputClasses = isNameInputInvalid
+    ? "form-control invalid"
+    : "form-control";
 
   return (
     <form onSubmit={formSubmitHandler}>
       <div className={nameInputClasses}>
         <label htmlFor="name">Введите Имя</label>
         <input
-          ref={nameInputRef}
           type="text"
           id="name"
           value={enteredName}
           onChange={nameInputChangeHandler}
+          onBlur={nameInputLostFocusHandler}
         />
-        {!isEnteredNameValid && <p className="error-text">Введите имя</p>}
+        {isNameInputInvalid && (
+          <p className="error-text">Нужно обязательно ввести имя</p>
+        )}
       </div>
       <div className="form-actions">
         <button>Отправить</button>
