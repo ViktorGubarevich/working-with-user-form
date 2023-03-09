@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const SomeInput = () => {
   const [enteredName, setEnteredName] = useState("");
   const [enteredEmail, setEnteredEmail] = useState("");
   const [wasNameInputTouched, setWasNameInputTouched] = useState(false);
   const [wasEmailInputTouched, setWasEmailInputTouched] = useState(false);
-
-  // const [isFormValid, setIsFormValid] = useState(false);
 
   const isEnteredNameValid = enteredName.trim() !== "";
   const isNameInputInvalid = !isEnteredNameValid && wasNameInputTouched;
@@ -15,14 +13,6 @@ const SomeInput = () => {
   const isEmailInputInvalid = !isEnteredEmailValid && wasEmailInputTouched;
 
   let isFormValid = false;
-
-  // useEffect(() => {
-  //   if (isEnteredNameValid) {
-  //     setIsFormValid(true);
-  //   } else {
-  //     setIsFormValid(false);
-  //   }
-  // }, [isEnteredNameValid]);
 
   if (isEnteredNameValid && isEnteredEmailValid) {
     isFormValid = true;
